@@ -16,14 +16,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    loginwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    maindialogwindow.cpp \
+    pinmanager.cpp \
+    saldo.cpp \
+    transazioni.cpp \
+    viewsaldo.cpp \
+    viewtransazioni.cpp \
+    prelievocontroller.cpp \
+    ricaricacontroller.cpp \
+    pindialog.cpp
 
 HEADERS += \
-    mainwindow.h
+    AbstractView.h \
+    Model.h \
+    loginwindow.h \
+    maindialogwindow.h \
+    pinmanager.h \
+    saldo.h \
+    transazioni.h \
+    viewsaldo.h \
+    viewtransazioni.h \
+    prelievocontroller.h \
+    ricaricacontroller.h \
+    pindialog.h
 
 FORMS += \
-    mainwindow.ui
+    loginwindow.ui \
+    maindialogwindow.ui \
+    prelievocontroller.ui \
+    ricaricacontroller.ui \
+    pindialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
