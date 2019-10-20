@@ -1,11 +1,10 @@
 #include "loginwindow.h"
-#include "ui_loginwindow.h"
-
-#include "maindialogwindow.h"
+#include "ui_dialog.h"
+#include "mainwindow.h"
 
 LogInWindow::LogInWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::LogInWindow)
+    QDialog(parent),
+    ui(new Ui::Dialog)
 {
     ui->setupUi(this);
     pinManager = new PinManager;
@@ -20,11 +19,11 @@ LogInWindow::~LogInWindow()
     delete pinManager;
 }
 
+
 void LogInWindow::on_pushButton_clicked()
 {
     QString user = ui->lineEdit_user->text();
     QString s_pin = ui->lineEdit_pin->text();
-
 
     if(user=="jacopo"){
         if(s_pin.length()==4){
@@ -32,20 +31,9 @@ void LogInWindow::on_pushButton_clicked()
 
             if(pinManager->isCorret(pin)){
 
-
-                MainDialogWindow w(this);
-                w.setModal(true);
+                this->parentWidget()->show();
                 hide();
-                w.exec();
-
-                ui->lineEdit_user->setText("");
-                ui->lineEdit_pin->setText("");
-                ui->lineEdit_pin->setEchoMode(QLineEdit::Password);
-                if(ui->checkBox->isChecked())
-                    ui->checkBox->click();
-                ui->label_errori->setText("");
             }
-
 
         }else {
             if(count_p<3){
