@@ -1,14 +1,14 @@
-#ifndef LOGINWINDOW_H
-#define LOGINWINDOW_H
+#ifndef DIALOG_H
+#define DIALOG_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include "pinmanager.h"
 
 namespace Ui {
-class LogInWindow;
+class Dialog;
 }
 
-class LogInWindow : public QMainWindow
+class LogInWindow : public QDialog
 {
     Q_OBJECT
 
@@ -21,10 +21,10 @@ private slots:
     void on_checkBox_stateChanged(int arg1);
 
 private:
-    Ui::LogInWindow *ui;
+    Ui::Dialog *ui;
     PinManager* pinManager;
 
     unsigned short int count_u,count_p;
 };
 
-#endif // LOGINWINDOW_H
+#endif // DIALOG_H
