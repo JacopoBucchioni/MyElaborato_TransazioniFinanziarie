@@ -18,7 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     loginwindow.cpp \
     main.cpp \
-    maindialogwindow.cpp \
+    mainwindow.cpp \
     pinmanager.cpp \
     saldo.cpp \
     transazioni.cpp \
@@ -32,7 +32,7 @@ HEADERS += \
     AbstractView.h \
     Model.h \
     loginwindow.h \
-    maindialogwindow.h \
+    mainwindow.h \
     pinmanager.h \
     saldo.h \
     transazioni.h \
@@ -44,7 +44,7 @@ HEADERS += \
 
 FORMS += \
     loginwindow.ui \
-    maindialogwindow.ui \
+    mainwindow.ui \
     prelievocontroller.ui \
     ricaricacontroller.ui \
     pindialog.ui
