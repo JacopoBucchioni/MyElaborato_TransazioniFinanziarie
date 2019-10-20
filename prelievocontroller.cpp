@@ -22,31 +22,35 @@ PrelievoController::~PrelievoController()
 void PrelievoController::on_pushButton_ok_clicked()
 {
     double v = (ui->lineEdit_prelievo->text()).toDouble();
-    if(v>0){
-        double s = saldo->getSaldo();
-        if(v <= s){
-            QString s_pin = ui->lineEdit_pin->text();
-            if(s_pin.length()==4){
-                unsigned short int pin =s_pin.toUShort();
-                if(pinManager->isCorret(pin)){
+    QString s_pin = ui->lineEdit_pin->text();
+    if(s_pin.length()==4){
+        unsigned short int pin =s_pin.toUShort();
+        if(pinManager->isCorret(pin)){
+            if(v>0){
+                double s = saldo->getSaldo();
+                if(v <= s){
                     saldo->setSaldo((s-v));
                     transazioni->addTransizione("Prelievo di "+QString::number(v)+" euro -> saldo: "+QString::number(s-v));
                     Notify();
                     hide();
+                }else {
+                    ui->label_errori->setStyleSheet("color: red");
+                    ui->label_errori->setText("Importo non disponibile");
                 }
-            }else {
+            }else{
                 ui->label_errori->setStyleSheet("color: red");
-                ui->label_errori->setText("PIN errato");
+                ui->label_errori->setText("L'Importo deve essere >0");
             }
+
         }else {
             ui->label_errori->setStyleSheet("color: red");
-            ui->label_errori->setText("Importo non disponibile");
+            ui->label_errori->setText("PIN errato");
         }
-    }else{
+    }else {
         ui->label_errori->setStyleSheet("color: red");
-        ui->label_errori->setText("Importo errato");
-    }
+        ui->label_errori->setText("PIN errato");
 
+    }
 }
 
 void PrelievoController::on_pushButton_cancel_clicked()
