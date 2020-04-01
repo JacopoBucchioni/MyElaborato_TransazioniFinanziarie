@@ -1,69 +1,78 @@
 #include "prelievocontroller.h"
 #include "ui_prelievocontroller.h"
+#include "IdCounter.h"
 
-PrelievoController::PrelievoController(Saldo* s, Transazioni* t,QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PrelievoController),
-    saldo(s),
-    transazioni(t)
+PrelievoController::PrelievoController(Conto* c,QWidget *parent) :
+  QDialog(parent),
+  ui(new Ui::PrelievoController),
+  conto(c)
 {
-    ui->setupUi(this);
-    pinManager = new PinManager;
-    ui->lineEdit_pin->setEchoMode(QLineEdit::Password);
+  ui->setupUi(this);
+  ui->lineEdit_pin->setEchoMode(QLineEdit::Password);
+  ui->dateEdit->setDate(QDate::currentDate());
+  ui->comboBox->addItem("Shopping");
+  ui->comboBox->addItem("Viaggio");
+  ui->comboBox->addItem("Ristoranti");
+  ui->comboBox->addItem("Bancomat");
+  ui->comboBox->addItem("Bonifico");
+  ui->comboBox->addItem("Assegno");
 }
 
 PrelievoController::~PrelievoController()
 {
-    delete ui;
-    delete pinManager;
+  delete ui;
 }
 
 
 void PrelievoController::on_pushButton_ok_clicked()
 {
-    double v = (ui->lineEdit_prelievo->text()).toDouble();
-    QString s_pin = ui->lineEdit_pin->text();
-    if(s_pin.length()==4){
-        unsigned short int pin =s_pin.toUShort();
-        if(pinManager->isCorret(pin)){
-            if(v>0){
-                double s = saldo->getSaldo();
-                if(v <= s){
-                    saldo->setSaldo((s-v));
-                    transazioni->addTransizione("Prelievo di "+QString::number(v)+" euro -> saldo: "+QString::number(s-v));
-                    Notify();
-                    hide();
-                }else {
-                    ui->label_errori->setStyleSheet("color: red");
-                    ui->label_errori->setText("Importo non disponibile");
-                }
-            }else{
-                ui->label_errori->setStyleSheet("color: red");
-                ui->label_errori->setText("L'Importo deve essere >0");
-            }
+  if(ui->dateEdit->date() <= QDate::currentDate()){
+      QDate data = ui->dateEdit->date();
+      QString s_pin = ui->lineEdit_pin->text();
 
+      if(s_pin.length()==4){
+          unsigned short int pin =s_pin.toUShort();
+          if(conto->getPin()->isCorret(pin)){
+
+              float v = (ui->lineEdit_prelievo->text()).toFloat();
+              if(v>0){
+                  if(!conto->isInRosso()){
+                      string causale =ui->comboBox->currentText().toStdString();
+                      Prelievo* newPrelievo = new Prelievo(IdCounter::getId(), data, v, causale);
+                      conto->addTransazione(newPrelievo);
+                      hide();
+
+                    }else {
+                      ui->label_errori->setStyleSheet("color: red");
+                      ui->label_errori->setText("Importo non disponibile");
+                    }
+                }else{
+                  ui->label_errori->setStyleSheet("color: red");
+                  ui->label_errori->setText("L'Importo deve essere >0");
+                }
+            }else {
+              ui->label_errori->setStyleSheet("color: red");
+              ui->label_errori->setText("PIN errato");
+            }
         }else {
-            ui->label_errori->setStyleSheet("color: red");
-            ui->label_errori->setText("PIN errato");
+          ui->label_errori->setStyleSheet("color: red");
+          ui->label_errori->setText("PIN errato");
         }
     }else {
-        ui->label_errori->setStyleSheet("color: red");
-        ui->label_errori->setText("PIN errato");
-
+      ui->label_errori->setStyleSheet("color: red");
+      ui->label_errori->setText("La Data supera quella odierna");
     }
 }
 
 void PrelievoController::on_pushButton_cancel_clicked()
 {
-    hide();
+  hide();
 }
 
 void PrelievoController::on_checkBox_stateChanged(int arg1)
 {
-    if(arg1){
-        ui->lineEdit_pin->setEchoMode(QLineEdit::Normal);
-    }
-    else{
-        ui->lineEdit_pin->setEchoMode(QLineEdit::Password);
-    }
+  if(arg1)
+    ui->lineEdit_pin->setEchoMode(QLineEdit::Normal);
+  else
+    ui->lineEdit_pin->setEchoMode(QLineEdit::Password);
 }

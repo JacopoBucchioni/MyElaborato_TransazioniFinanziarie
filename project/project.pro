@@ -18,13 +18,15 @@ INCLUDEPATH *= \
     lib/
 
 SOURCES += \
+    conto.cpp \
     loginwindow.cpp \
     main.cpp \
     mainwindow.cpp \
-    saldo.cpp \
-    viewsaldo.cpp \
-    transazioni.cpp \
-    viewtransazioni.cpp \
+    persona.cpp \
+    prelievo.cpp \
+    ricarica.cpp \
+    transazione.cpp \
+    transazionimanager.cpp \
     ricaricacontroller.cpp \
     prelievocontroller.cpp \
     pinmanager.cpp \
@@ -33,14 +35,17 @@ SOURCES += \
 
 
 HEADERS += \
+    IdCounter.h \
+    conto.h \
     loginwindow.h \
     mainwindow.h \
     Model.h \
     AbstractView.h \
-    saldo.h \
-    viewsaldo.h \
-    transazioni.h \
-    viewtransazioni.h \
+    persona.h \
+    prelievo.h \
+    ricarica.h \
+    transazione.h \
+    transazionimanager.h \
     ricaricacontroller.h \
     prelievocontroller.h \
     pinmanager.h \
@@ -54,6 +59,7 @@ FORMS += \
     ricaricacontroller.ui \
     prelievocontroller.ui \
     pindialog.ui \
+    transazionimanager.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

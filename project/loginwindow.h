@@ -2,7 +2,7 @@
 #define LOGINWINDOW_H
 
 #include <QDialog>
-#include"pinmanager.h"
+#include "conto.h"
 
 namespace Ui {
   class LoginWindow;
@@ -13,7 +13,7 @@ class LoginWindow : public QDialog
   Q_OBJECT
 
 public:
-  explicit LoginWindow(QWidget *parent = nullptr);
+  explicit LoginWindow(Conto* c, QWidget *parent = nullptr);
   ~LoginWindow();
 
 private slots:
@@ -22,9 +22,7 @@ private slots:
 
 private:
   Ui::LoginWindow *ui;
-
-  PinManager* pinManager;
-
+  Conto* conto;
   unsigned short int count_u,count_p;
 };
 
