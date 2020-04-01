@@ -20,7 +20,6 @@ public:
   QDate getDate() const;
   void setDate(QDate d);
   string getTipo() const;
-  void setTipo(string t);
 
 protected:
   unsigned int ID;
