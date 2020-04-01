@@ -17,4 +17,3 @@ QDate Transazione::getDate() const{return data;}
 void Transazione::setDate(QDate d) {data=d;}
 
 string Transazione::getTipo() const{return tipoTransazione;}
-void Transazione::setTipo(string t) {tipoTransazione=t;}
