@@ -47,6 +47,8 @@ void TransazioniManager::on_salvaSuFile_pushButton_clicked()
   (*transazionitxt).write(textFormatted);
   (*transazionitxt).flush();
   (*transazionitxt).close();
+
+  delete transazionitxt;
 }
 
 
