@@ -12,6 +12,14 @@ Conto::Conto(Persona* p, float s) : intestatario(p), saldoIniziale(s)
 
 Conto::~Conto(){
   observers.erase(observers.begin(),observers.end());
+
+  for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
+    delete (*itr);
+
+  transazioni.clear();
+
+  delete intestatario;
+  delete pin;
 }
 
 
@@ -36,6 +44,9 @@ void Conto::addTransazione(Transazione* t){
 bool Conto::eliminaTransazione(unsigned int id){
   for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++){
       if((*itr)->getId()==id){
+
+          delete (*itr);
+
           transazioni.erase(itr);
           calcolaSaldo();
           Notify();
@@ -94,7 +105,9 @@ void  Conto::attach(AbstractView* o){observers.push_back(o);}
 
 void Conto::detach(AbstractView* o){observers.remove(o);}
 
-void Conto::Notify(){
+void Conto::Notify()
+{
   for(list<AbstractView*>::iterator itr=observers.begin(); itr!=observers.end(); itr++)
-    (*itr)->update();}
+    (*itr)->update();
+}
 
