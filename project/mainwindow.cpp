@@ -55,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+  salvaSaldoSuFile();
+
+  conto->detach(this);
+  delete saldotxt;
+
+  delete conto;
   delete ui;
 }
 
@@ -65,7 +71,8 @@ void MainWindow::update(){
   else
     ui->saldo_lineEdit->setStyleSheet("color: black");
   ui->saldo_lineEdit->setText(QString::number(conto->getSaldo()) + " € ");
-  salvaSaldoSuFile();
+
+  //salvaSaldoSuFile();
 
   ui->transazioni_plainTextEdit->clear();
   list<Transazione*> t = conto->getTransazioni();
