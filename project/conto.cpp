@@ -36,6 +36,9 @@ void Conto::calcolaSaldo(){
 }
 
 void Conto::addTransazione(Transazione* t){
+  for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
+    if((*itr)->getId()==t->getId())
+      return;
   transazioni.push_back(t);
   calcolaSaldo();
   Notify();
