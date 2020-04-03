@@ -1,6 +1,5 @@
 #include "ricaricacontroller.h"
 #include "ui_ricaricacontroller.h"
-#include "IdCounter.h"
 
 RicaricaController::RicaricaController(Conto* c, QWidget *parent) :
   QDialog(parent),
@@ -36,7 +35,7 @@ void RicaricaController::on_pushButton_ok_clicked()
               float v = (ui->lineEdit_ricarica->text()).toFloat();
               if(v>0){
                   string causale =ui->comboBox->currentText().toStdString();
-                  Ricarica* newRicarica = new Ricarica(IdCounter::getId(), data, v, causale);
+                  Ricarica* newRicarica = new Ricarica(data, v, causale);
                   conto->addTransazione(newRicarica);
                   hide();
 
