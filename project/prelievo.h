@@ -5,7 +5,7 @@
 class Prelievo : public Transazione
 {
 public:
-  Prelievo(unsigned int id, QDate d, float i, string c);
+  Prelievo(QDate d, float i, string c);
   virtual ~Prelievo()override;
   virtual void setImporto(float value)override;
   virtual float getImporto() const override;
