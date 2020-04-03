@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include "IdCounter.h"
-unsigned int IdCounter::Id=0;
 
 int main(int argc, char *argv[])
 {
