@@ -1,6 +1,5 @@
 #include "prelievocontroller.h"
 #include "ui_prelievocontroller.h"
-#include "IdCounter.h"
 
 PrelievoController::PrelievoController(Conto* c,QWidget *parent) :
   QDialog(parent),
@@ -38,7 +37,7 @@ void PrelievoController::on_pushButton_ok_clicked()
               if(v>0){
                   if(!conto->isInRosso()){
                       string causale =ui->comboBox->currentText().toStdString();
-                      Prelievo* newPrelievo = new Prelievo(IdCounter::getId(), data, v, causale);
+                      Prelievo* newPrelievo = new Prelievo(data, v, causale);
                       conto->addTransazione(newPrelievo);
                       hide();
 
