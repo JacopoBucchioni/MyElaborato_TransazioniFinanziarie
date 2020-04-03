@@ -8,7 +8,7 @@ using namespace std;
 class Transazione
 {
 public:
-  Transazione(unsigned int id, QDate d, float i, string t, string c);
+  Transazione(QDate d, float i, string t, string c);
   virtual ~Transazione()=0;
 
   virtual float getImporto() const;
@@ -16,7 +16,6 @@ public:
   string getCausale() const;
   void setCausale(string c);
   unsigned int getId() const;
-  void setId(unsigned int id);
   QDate getDate() const;
   void setDate(QDate d);
   string getTipo() const;
