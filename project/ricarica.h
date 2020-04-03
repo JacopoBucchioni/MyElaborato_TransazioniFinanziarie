@@ -5,7 +5,7 @@
 class Ricarica : public Transazione
 {
 public:
-  Ricarica(unsigned int id, QDate d, float i, string c);
+  Ricarica(QDate d, float i, string c);
   virtual ~Ricarica();
 };
 
