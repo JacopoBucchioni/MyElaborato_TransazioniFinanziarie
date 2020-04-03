@@ -85,6 +85,8 @@ Transazione* Conto::getUltimaTransazione() const {return transazioni.back();}
 
 list<Transazione*> Conto::getTransazioni() const {return transazioni;}
 
+int Conto::getNumeroTransazioni() const {return transazioni.size();}
+
 float Conto::getSaldo() const {return saldo;}
 
 bool Conto::isInRosso(){
