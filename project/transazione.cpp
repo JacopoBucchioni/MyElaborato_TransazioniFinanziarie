@@ -1,6 +1,8 @@
 #include "transazione.h"
+#include "IdCounter.h"
+unsigned int IdCounter::Id=0;
 
-Transazione::Transazione(unsigned int id, QDate d, float i, string t, string c) : ID(id), data(d), importo(i), tipoTransazione(t), causale(c) {}
+Transazione::Transazione(QDate d, float i, string t, string c) : ID(IdCounter::getId()), data(d), importo(i), tipoTransazione(t), causale(c) {}
 
 Transazione::~Transazione(){}
 
@@ -8,7 +10,6 @@ float Transazione::getImporto() const{return importo;}
 void Transazione::setImporto(float value) {importo=value;}
 
 unsigned int Transazione::getId() const{return ID;}
-void Transazione::setId(unsigned int id) {ID=id;}
 
 string Transazione::getCausale() const{return causale;}
 void Transazione::setCausale(string c){causale=c;}
