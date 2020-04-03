@@ -1,6 +1,6 @@
 #include "prelievo.h"
 
-Prelievo::Prelievo(unsigned int id, QDate d, float i, string c) : Transazione(id,d,-i,"PRELIEVO",c) {}
+Prelievo::Prelievo(QDate d, float i, string c) : Transazione(d,-i,"PRELIEVO",c) {}
 
 Prelievo::~Prelievo(){}
 
