@@ -21,8 +21,9 @@ public:
   bool eliminaTransazione(unsigned int id);
   list<Transazione*> selezionaTransazioni(QDate inizio, QDate fine, string categoria, string tipoTransazione="");
 
-  Transazione* getUltimaTransazione() const;
+  Transazione* getUltimaTransazione()const;
   list<Transazione*> getTransazioni()const;
+  int getNumeroTransazioni()const;
   float getSaldo() const;
   bool isInRosso();
   Persona* getIntestario()const;
