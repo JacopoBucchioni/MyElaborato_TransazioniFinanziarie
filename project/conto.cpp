@@ -61,25 +61,29 @@ bool Conto::eliminaTransazione(unsigned int id){
 
 list<Transazione*> Conto::selezionaTransazioni(QDate inizio, QDate fine, string categoria, string tipoTransazione){
   list<Transazione*> r;
-  for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
-    if((*itr)->getDate()>=inizio && (*itr)->getDate()<=fine)
-      r.push_back(*itr);
+  if(inizio<=fine){
+      if(fine>QDate::currentDate())
+        fine=QDate::currentDate();
 
-  if(categoria!="")
-    for(auto itr=r.begin(); itr!=r.end(); itr++)
-      if((*itr)->getCausale()!=categoria)
-        r.remove(*itr);
+      for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
+        if((*itr)->getDate()>=inizio && (*itr)->getDate()<=fine)
+          r.push_back(*itr);
 
-  if(tipoTransazione!="")
-    for(auto itr=r.begin(); itr!=r.end(); itr++)
-      if((*itr)->getTipo()!=tipoTransazione)
-        r.remove(*itr);
+      if(categoria!="")
+        for(auto itr=r.begin(); itr!=r.end(); itr++)
+          if((*itr)->getCausale()!=categoria)
+            r.remove(*itr);
 
-  if(categoria!="")
-    for(auto itr=r.begin(); itr!=r.end(); itr++)
-      if((*itr)->getCausale()!=categoria)
-        r.remove(*itr);
+      if(tipoTransazione!="")
+        for(auto itr=r.begin(); itr!=r.end(); itr++)
+          if((*itr)->getTipo()!=tipoTransazione)
+            r.remove(*itr);
 
+      if(categoria!="")
+        for(auto itr=r.begin(); itr!=r.end(); itr++)
+          if((*itr)->getCausale()!=categoria)
+            r.remove(*itr);
+    }
   return r;
 }
 
