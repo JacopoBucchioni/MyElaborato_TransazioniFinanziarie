@@ -19,7 +19,7 @@ public:
   void calcolaSaldo();
   void addTransazione(Transazione* t);
   bool eliminaTransazione(unsigned int id);
-  list<Transazione*> selezionaTransazioni(QDate inizio, QDate fine, string categoria, string tipoTransazione="");
+  list<Transazione*> selezionaTransazioni(QDate inizio, QDate fine=QDate::currentDate(), string categoria="", string tipoTransazione="");
 
   Transazione* getUltimaTransazione()const;
   list<Transazione*> getTransazioni()const;
