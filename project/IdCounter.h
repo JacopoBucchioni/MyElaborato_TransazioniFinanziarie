@@ -13,3 +13,5 @@ public:
 private:
   static unsigned int Id;
 };
+
+unsigned int IdCounter::Id=0;
