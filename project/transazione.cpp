@@ -1,6 +1,5 @@
 #include "transazione.h"
 #include "IdCounter.h"
-unsigned int IdCounter::Id=0;
 
 Transazione::Transazione(QDate d, float i, string t, string c) : ID(IdCounter::getId()), data(d), importo(i), tipoTransazione(t), causale(c) {}
 
