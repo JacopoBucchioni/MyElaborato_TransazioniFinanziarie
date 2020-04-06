@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "prelievocontroller.h"
-#include "ricaricacontroller.h"
+#include "spesaController.h"
+#include "versamentoController.h"
 #include "pindialog.h"
 #include "loginwindow.h"
 #include "transazionimanager.h"
@@ -17,21 +17,21 @@ MainWindow::MainWindow(QWidget *parent) :
   float saldoIniziale;
   saldotxt = new QFile("saldo.txt");
   SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f023)); //some random number
-  if(!((*saldotxt).exists("saldo.txt"))){
-      (*saldotxt).open(QIODevice::ReadWrite | QFile::Text);
+  if(!(saldotxt->exists("saldo.txt"))){
+      saldotxt->open(QIODevice::ReadWrite | QFile::Text);
       QTextStream stream(saldotxt);
       saldoIniziale = 0; //SET SALDO INIZIALE DI DEFAULT A 0
       QString crypted=crypto.encryptToString(QString::number(saldoIniziale));
       stream<<crypted;
     }else {
-      (*saldotxt).open(QIODevice::ReadOnly | QFile::Text);
+      saldotxt->open(QIODevice::ReadOnly | QFile::Text);
       QTextStream stream(saldotxt);
       QString v = stream.readAll();
       QString decrypted = crypto.decryptToString(v);
       saldoIniziale = decrypted.toFloat();
     }
-  (*saldotxt).flush();
-  (*saldotxt).close();
+  saldotxt->flush();
+  saldotxt->close();
 
   conto = new Conto(new Persona("jacopo","bucchioni"),saldoIniziale);
   conto->attach(this);
@@ -75,22 +75,21 @@ void MainWindow::update(){
   //salvaSaldoSuFile();
 
   ui->transazioni_plainTextEdit->clear();
-  list<Transazione*> t = conto->getTransazioni();
+  list<Transazione> t = conto->getTransazioni();
   QString text = "";
   for(auto itr = t.rbegin(); itr!=t.rend(); itr++)
-    if((*itr)!=nullptr)
-      text +="[ID="+QString::number((*itr)->getId())+"] "+QString::fromStdString((*itr)->getTipo())+" di "+QString::number((*itr)->getImporto())+"€ per ''"+QString::fromStdString((*itr)->getCausale())+"'' in Data: "+(*itr)->getDate().toString("dd/MM/yyyy")+"\n";
+      text +="[ID="+QString::number(itr->getId())+"] "+QString::fromStdString(itr->getTipo())+" di "+QString::number(itr->getImporto())+"€ per ''"+QString::fromStdString(itr->getCausale())+"'' in Data: "+itr->getDate().toString("dd/MM/yyyy")+"\n";
   ui->transazioni_plainTextEdit->setPlainText(text);
 }
 
 void MainWindow::salvaSaldoSuFile() {
-    (*saldotxt).open(QFile::WriteOnly | QFile::Text);
+    saldotxt->open(QFile::WriteOnly | QFile::Text);
     QTextStream out(saldotxt);
     SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f023)); //some random number
     QString crypted=crypto.encryptToString(QString::number(conto->getSaldo()));
     out<<crypted;
-    (*saldotxt).flush();
-    (*saldotxt).close();
+    saldotxt->flush();
+    saldotxt->close();
 }
 
 
@@ -104,16 +103,16 @@ void MainWindow::on_transazioni_Button_clicked()
 
 void MainWindow::on_prelieva_Button_clicked()
 {
-  PrelievoController popupPrelievo(conto);
-  popupPrelievo.setModal(true);
-  popupPrelievo.exec();
+  SpesaController popupSpesa(conto);
+  popupSpesa.setModal(true);
+  popupSpesa.exec();
 }
 
 void MainWindow::on_ricarica_Button_clicked()
 {
-  RicaricaController popupRicarica(conto);
-  popupRicarica.setModal(true);
-  popupRicarica.exec();
+  VersamentoController popupVersamento(conto);
+  popupVersamento.setModal(true);
+  popupVersamento.exec();
 }
 
 
