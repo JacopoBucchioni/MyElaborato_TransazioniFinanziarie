@@ -4,8 +4,6 @@
 #include "conto.h"
 #include "transazione.h"
 #include "persona.h"
-#include "ricarica.h"
-#include "prelievo.h"
 
 Persona* const intestatario = new Persona("nome","cognome");
 const float saldoIniziale = 0;
@@ -32,13 +30,13 @@ UnitTest::UnitTest(){}
 
 void UnitTest::Test_calcolaSaldo(){
   Conto* conto = new Conto(intestatario,saldoIniziale);
-  Ricarica* r1 = new Ricarica(QDate::currentDate(),100,"prova ricarica");
-  conto->addTransazione(r1);
-  Prelievo* p1 = new Prelievo(QDate::currentDate(),50,"prova prelievo");
-  conto->addTransazione(p1);
+  Transazione v1 = Transazione(QDate::currentDate(),100,"versamento di prova",true);
+  conto->addTransazione(v1);
+  Transazione s1 = Transazione(QDate::currentDate(),50,"spesa di prova",false);
+  conto->addTransazione(v1);
   float newSaldo = conto->getSaldo();
-  QCOMPARE(newSaldo,float(50));
-  conto->addTransazione(p1);
+  QCOMPARE(newSaldo,float(100));
+  conto->addTransazione(s1);
   float newSaldo2 = conto->getSaldo();
   QCOMPARE(newSaldo2,float(50));
 }
@@ -46,85 +44,97 @@ void UnitTest::Test_calcolaSaldo(){
 void UnitTest::Test_SaldoInRosso(){
   float saldoIniziale = 100;
   Conto* conto = new Conto(intestatario,saldoIniziale);
-  Prelievo* p1 = new Prelievo(QDate::currentDate(),150,"prova prelievo");
-  conto->addTransazione(p1);
-  QCOMPARE(conto->isInRosso(),true);
+  Transazione s1 = Transazione(QDate::currentDate(),150,"spesa di prova",false);
+  conto->addTransazione(s1);
+  bool rosso = conto->isInRosso();
+  QCOMPARE(rosso,true);
 }
 
 void UnitTest::Test_aggiungiTransazione(){
   Conto* conto = new Conto(intestatario,saldoIniziale);
-  Ricarica* r1 = new Ricarica(QDate::currentDate(),100,"prova ricarica");
-  conto->addTransazione(r1);
-  Transazione* t = conto->getUltimaTransazione();
-  int n = conto->getNumeroTransazioni();
-  QCOMPARE(t,r1);
-  QCOMPARE(n,1);
-  conto->addTransazione(r1);
+  Transazione v1 = Transazione(QDate::currentDate(),100,"versamento di prova",true);
+  conto->addTransazione(v1);
+  Transazione s1 = Transazione(QDate::currentDate(),100,"spesa di prova",false);
+  conto->addTransazione(s1);
+  Transazione t = conto->getUltimaTransazione();
   int n1 = conto->getNumeroTransazioni();
-  QCOMPARE(n1,1);
+  QCOMPARE(t.getId(),s1.getId());
+  QCOMPARE(n1,2);
+  conto->addTransazione(v1);
+  int n2 = conto->getNumeroTransazioni();
+  QCOMPARE(n2,2);
 }
 
 void UnitTest::Test_eliminaTransazione(){
   Conto* conto = new Conto(intestatario,saldoIniziale);
-  Ricarica* r1 = new Ricarica(QDate::currentDate(),100,"prova ricarica");
-  conto->addTransazione(r1);
-  Prelievo* p1 = new Prelievo(QDate::currentDate(),50,"prova prelievo");
-  conto->addTransazione(p1);
+  Transazione v1 = Transazione(QDate::currentDate(),100,"versamento di prova",true);
+  conto->addTransazione(v1);
+  Transazione s1 = Transazione(QDate::currentDate(),50,"spesa di prova",false);
+  conto->addTransazione(s1);
   int n1 = conto->getNumeroTransazioni();
   QCOMPARE(n1,2);
-  conto->eliminaTransazione(r1->getId());
+  conto->eliminaTransazione(v1.getId());
   int n2 = conto->getNumeroTransazioni();
   QCOMPARE(n2,1);
-  conto->eliminaTransazione(p1->getId());
-  n2 = conto->getNumeroTransazioni();
-  QCOMPARE(n2,0);
+  conto->eliminaTransazione(s1.getId());
+  int n3 = conto->getNumeroTransazioni();
+  QCOMPARE(n3,0);
 }
 
 void UnitTest::Test_filtraTransazioni(){
   Conto* conto = new Conto(intestatario,saldoIniziale);
-  Ricarica* r1 = new Ricarica(QDate(2019,12,10),200,"ricarica 1");
+  Transazione r1 = Transazione(QDate(2019,12,10),200,"versamento 1",true);
   conto->addTransazione(r1);
-  Ricarica* r2 = new Ricarica(QDate(2019,12,31),100,"ricarica 2");
+  Transazione r2 = Transazione(QDate(2019,12,31),100,"versamento 2",true);
   conto->addTransazione(r2);
-  Prelievo* p1 = new Prelievo(QDate(2020,1,10),50,"prelievo 1");
+  Transazione p1 = Transazione(QDate(2020,1,10),50,"spesa 1",false);
   conto->addTransazione(p1);
-  Prelievo* p2 = new Prelievo(QDate(2020,2,10),30,"prelievo 2");
+  Transazione p2 = Transazione(QDate(2020,2,10),30,"spesa 2",false);
   conto->addTransazione(p2);
-  Ricarica* r3 = new Ricarica(QDate(2020,3,10),300,"ricarica 3");
+  Transazione r3 = Transazione(QDate(2020,3,10),300,"versamento 3",true);
   conto->addTransazione(r3);
-  Prelievo* p3 = new Prelievo(QDate::currentDate(),150,"prelievo 3");
+  Transazione p3 = Transazione(QDate::currentDate(),150,"spesa 3",false);
   conto->addTransazione(p3);
-  Prelievo* p4 = new Prelievo(QDate::currentDate(),250,"prelievo 4");
+  Transazione p4 = Transazione(QDate::currentDate(),250,"spesa 4",false);
   conto->addTransazione(p4);
 
   //Filtro transazioni solo sulle date: cerco transazioni effetuate solo nel 2019
-  list<Transazione*> s1 = conto->selezionaTransazioni(QDate(2019,1,1),QDate(2019,12,31));
-  for(Transazione* t : s1)
-    QCOMPARE(((*t).getTipo()),string("RICARICA"));
+  list<Transazione*> l1 = conto->selezionaTransazioni(QDate(2019,1,1),QDate(2019,12,31));
+  for(Transazione* t : l1)
+    QCOMPARE(((*t).getTipo()),string("VERSAMENTO"));
 
-  //Filtro transazioni solo sul tipo di transazione: cerco tutti i prelievi
-  list<Transazione*> s2 = conto->selezionaTransazioni(QDate(2019,1,1),QDate::currentDate(),"","PRELIEVO");
-  for(Transazione* t : s2)
-    QCOMPARE(((*t).getTipo()),string("PRELIEVO"));
+  //Filtro transazioni solo sul tipo di transazione: cerco tutte le spese
+  list<Transazione*> l2 = conto->selezionaTransazioni(QDate(2019,1,1),QDate::currentDate(),"","SPESA");
+  for(Transazione* t : l2)
+    QCOMPARE(((*t).getTipo()),string("SPESA"));
 
-  //Filtro transazioni solo sulla causale: cerco la transazione con causale "prelievo 2"
-  list<Transazione*> s3 = conto->selezionaTransazioni(QDate(2019,1,1),QDate::currentDate(),"prelievo 2");
-  for(Transazione* t : s3)
-    QCOMPARE(((*t).getCausale()),string("prelievo 2"));
+  //Filtro transazioni solo sulla causale: cerco la transazione con causale "spesa 2"
+  list<Transazione*> l3 = conto->selezionaTransazioni(QDate(2019,1,1),QDate::currentDate(),"spesa 2");
+  for(Transazione* t : l3)
+    QCOMPARE(((*t).getCausale()),string("spesa 2"));
 
+  //Filtro transazioni sulla date e sul tipo di transazione: cerco le transazioni avvenute tra il 10/1 e il 10/3 che sono solo spese
+  list<Transazione*> l4 = conto->selezionaTransazioni(QDate(2020,1,10),QDate(2020,3,10),"","SPESA");
+  bool verify = false;
+  for(Transazione* t : l4){
+    QCOMPARE((*t).getTipo(),string("SPESA"));
+    if((*t).getDate()<QDate(2020,1,10) || (*t).getDate()>QDate(2020,3,10))
+      verify = true;
+    QCOMPARE(verify,false);
+    }
 }
 
 void UnitTest::Test_IdTransazione(){
-  Ricarica* r1 = new Ricarica(QDate::currentDate(),100,"prova");
-  Ricarica* r2 = new Ricarica(QDate::currentDate(),100,"prova");
-  Prelievo* p1 = new Prelievo(QDate::currentDate(),100,"prova");
-  Prelievo* p2 = new Prelievo(QDate::currentDate(),100,"prova");
-  Ricarica* r3 = new Ricarica(QDate::currentDate(),100,"prova");
-  QCOMPARE(int(r1->getId()),1);
-  QCOMPARE(int(r2->getId()),2);
-  QCOMPARE(int(p1->getId()),3);
-  QCOMPARE(int(p2->getId()),4);
-  QCOMPARE(int(r3->getId()),5);
+  Transazione t1 = Transazione(QDate::currentDate(),100,"prova",true);
+  Transazione t2 = Transazione(QDate::currentDate(),100,"prova",true);
+  Transazione t3 = Transazione(QDate::currentDate(),100,"prova",false);
+  Transazione t4 = Transazione(QDate::currentDate(),100,"prova",false);
+  Transazione t5 = Transazione(QDate::currentDate(),100,"prova",true);
+  QCOMPARE(int(t1.getId()),1);
+  QCOMPARE(int(t2.getId()),2);
+  QCOMPARE(int(t3.getId()),3);
+  QCOMPARE(int(t4.getId()),4);
+  QCOMPARE(int(t5.getId()),5);
 }
 
 
