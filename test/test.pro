@@ -26,8 +26,6 @@ SOURCES += \
     ../project/conto.cpp \
     ../project/persona.cpp \
     ../project/pinmanager.cpp \
-    ../project/prelievo.cpp \
-    ../project/ricarica.cpp \
     ../project/transazione.cpp \
     ../project/lib/simplecrypt.cpp \
     unitTest.cpp \
@@ -40,7 +38,5 @@ HEADERS += \
     ../project/Model.h \
     ../project/persona.h \
     ../project/pinmanager.h \
-    ../project/prelievo.h \
-    ../project/ricarica.h \
     ../project/transazione.h \
     ../project/lib/simplecrypt.h \
