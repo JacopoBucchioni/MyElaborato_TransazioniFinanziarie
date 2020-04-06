@@ -23,15 +23,13 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     persona.cpp \
-    prelievo.cpp \
-    ricarica.cpp \
+    spesaController.cpp \
     transazione.cpp \
     transazionimanager.cpp \
-    ricaricacontroller.cpp \
-    prelievocontroller.cpp \
     pinmanager.cpp \
     pindialog.cpp \
     lib/simplecrypt.cpp \
+    versamentoController.cpp \
 
 
 HEADERS += \
@@ -42,24 +40,22 @@ HEADERS += \
     Model.h \
     AbstractView.h \
     persona.h \
-    prelievo.h \
-    ricarica.h \
+    spesaController.h \
     transazione.h \
     transazionimanager.h \
-    ricaricacontroller.h \
-    prelievocontroller.h \
     pinmanager.h \
     pindialog.h \
     lib/simplecrypt.h \
+    versamentoController.h \
 
 
 FORMS += \
     loginwindow.ui \
     mainwindow.ui \
-    ricaricacontroller.ui \
-    prelievocontroller.ui \
     pindialog.ui \
+    spesaController.ui \
     transazionimanager.ui \
+    versamentoController.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
