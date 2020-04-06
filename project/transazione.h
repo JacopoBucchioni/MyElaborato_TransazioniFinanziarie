@@ -8,11 +8,11 @@ using namespace std;
 class Transazione
 {
 public:
-  Transazione(QDate d, float i, string t, string c);
-  virtual ~Transazione()=0;
+  Transazione(QDate data, float importo, string causale, bool entrata);
+  ~Transazione();
 
-  virtual float getImporto() const;
-  virtual void setImporto(float value);
+  float getImporto() const;
+  void setImporto(float value);
   string getCausale() const;
   void setCausale(string c);
   unsigned int getId() const;
@@ -24,8 +24,8 @@ protected:
   unsigned int ID;
   QDate data;
   float importo;
-  string tipoTransazione;
   string causale;
+  bool entrata;
 };
 
 #endif // TRANSAZIONE_H
