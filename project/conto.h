@@ -16,13 +16,12 @@ public:
   Conto(Persona* p, float s);
   virtual ~Conto();
 
-  void calcolaSaldo();
-  void addTransazione(Transazione* t);
+  void addTransazione(Transazione t);
   bool eliminaTransazione(unsigned int id);
   list<Transazione*> selezionaTransazioni(QDate inizio, QDate fine=QDate::currentDate(), string categoria="", string tipoTransazione="");
 
-  Transazione* getUltimaTransazione()const;
-  list<Transazione*> getTransazioni()const;
+  Transazione getUltimaTransazione()const;
+  list<Transazione> getTransazioni()const;
   int getNumeroTransazioni()const;
   float getSaldo() const;
   bool isInRosso();
@@ -35,7 +34,9 @@ public:
 
 
 private:
-  list<Transazione*> transazioni;
+  void calcolaSaldo();
+
+  list<Transazione> transazioni;
   Persona* intestatario;
   float saldo;
   bool inRosso;
