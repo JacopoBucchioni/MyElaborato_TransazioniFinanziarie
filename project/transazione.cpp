@@ -1,7 +1,7 @@
 #include "transazione.h"
 #include "IdCounter.h"
 
-Transazione::Transazione(QDate d, float i, string t, string c) : ID(IdCounter::getId()), data(d), importo(i), tipoTransazione(t), causale(c) {}
+Transazione::Transazione(QDate data, float importo, string causale, bool entrata) : ID(IdCounter::getId()), data(data), importo(importo), causale(causale), entrata(entrata) {}
 
 Transazione::~Transazione(){}
 
@@ -16,4 +16,9 @@ void Transazione::setCausale(string c){causale=c;}
 QDate Transazione::getDate() const{return data;}
 void Transazione::setDate(QDate d) {data=d;}
 
-string Transazione::getTipo() const{return tipoTransazione;}
+string Transazione::getTipo() const{
+  if(entrata)
+    return "VERSAMENTO";
+  else
+    return "SPESA";
+}
