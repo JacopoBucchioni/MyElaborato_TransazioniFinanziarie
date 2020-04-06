@@ -1,7 +1,4 @@
 #include "conto.h"
-#include"lib/simplecrypt.h"
-#include<QTextStream>
-
 
 Conto::Conto(Persona* p, float s) : intestatario(p), saldoIniziale(s)
 {
@@ -13,10 +10,7 @@ Conto::Conto(Persona* p, float s) : intestatario(p), saldoIniziale(s)
 Conto::~Conto(){
   observers.erase(observers.begin(),observers.end());
 
-  for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
-    delete (*itr);
-
-  transazioni.clear();
+  transazioni.erase(transazioni.begin(), transazioni.end());
 
   delete intestatario;
   delete pin;
@@ -26,18 +20,18 @@ Conto::~Conto(){
 void Conto::calcolaSaldo(){
   float s=saldoIniziale;
   for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++){
-      if((*itr)->getTipo()=="PRELIEVO")
-        s-=(*itr)->getImporto();
-      if((*itr)->getTipo()=="RICARICA")
-        s+=(*itr)->getImporto();
+      if(itr->getTipo()=="SPESA")
+        s -= itr->getImporto();
+      if(itr->getTipo()=="VERSAMENTO")
+        s += itr->getImporto();
     }
   saldo = s;
   isInRosso();
 }
 
-void Conto::addTransazione(Transazione* t){
+void Conto::addTransazione(Transazione t){
   for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
-    if((*itr)->getId()==t->getId())
+    if(itr->getId()==t.getId())
       return;
   transazioni.push_back(t);
   calcolaSaldo();
@@ -46,10 +40,7 @@ void Conto::addTransazione(Transazione* t){
 
 bool Conto::eliminaTransazione(unsigned int id){
   for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++){
-      if((*itr)->getId()==id){
-
-          delete (*itr);
-
+      if(itr->getId()==id){
           transazioni.erase(itr);
           calcolaSaldo();
           Notify();
@@ -66,8 +57,8 @@ list<Transazione*> Conto::selezionaTransazioni(QDate inizio, QDate fine, string 
         fine=QDate::currentDate();
 
       for(auto itr=transazioni.begin(); itr!=transazioni.end(); itr++)
-        if((*itr)->getDate()>=inizio && (*itr)->getDate()<=fine)
-          r.push_back(*itr);
+        if(itr->getDate()>=inizio && itr->getDate()<=fine)
+          r.push_back(&(*itr));
 
       if(categoria!="")
         for(auto itr=r.begin(); itr!=r.end(); itr++)
@@ -78,19 +69,14 @@ list<Transazione*> Conto::selezionaTransazioni(QDate inizio, QDate fine, string 
         for(auto itr=r.begin(); itr!=r.end(); itr++)
           if((*itr)->getTipo()!=tipoTransazione)
             r.remove(*itr);
-
-      if(categoria!="")
-        for(auto itr=r.begin(); itr!=r.end(); itr++)
-          if((*itr)->getCausale()!=categoria)
-            r.remove(*itr);
     }
   return r;
 }
 
 
-Transazione* Conto::getUltimaTransazione() const {return transazioni.back();}
+Transazione Conto::getUltimaTransazione() const {return transazioni.back();}
 
-list<Transazione*> Conto::getTransazioni() const {return transazioni;}
+list<Transazione> Conto::getTransazioni() const {return transazioni;}
 
 int Conto::getNumeroTransazioni() const {return transazioni.size();}
 
