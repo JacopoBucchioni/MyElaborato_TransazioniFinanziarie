@@ -93,7 +93,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>mostar PIN</string>
+    <string>mostra PIN</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_errori">
