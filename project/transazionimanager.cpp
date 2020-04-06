@@ -35,18 +35,18 @@ void TransazioniManager::on_salvaSuFile_pushButton_clicked()
   QByteArray textFormatted = text.toUtf8();
 
   QFile* transazionitxt = new QFile("C:/Users/Jacopo/Desktop/transazioni.txt");
-  if(!((*transazionitxt).exists("C:/Users/Jacopo/Desktop/transazioni.txt"))){
-      (*transazionitxt).open(QFile::WriteOnly | QFile::Text);
-      (*transazionitxt).seek(0);
-      (*transazionitxt).write(textFormatted);
-      (*transazionitxt).flush();
-      (*transazionitxt).close();
+  if(!(transazionitxt->exists("C:/Users/Jacopo/Desktop/transazioni.txt"))){
+      transazionitxt->open(QFile::WriteOnly | QFile::Text);
+      transazionitxt->seek(0);
+      transazionitxt->write(textFormatted);
+      transazionitxt->flush();
+      transazionitxt->close();
     }
-  (*transazionitxt).open(QFile::WriteOnly | QFile::Text);
-  (*transazionitxt).seek(0);
-  (*transazionitxt).write(textFormatted);
-  (*transazionitxt).flush();
-  (*transazionitxt).close();
+  transazionitxt->open(QFile::WriteOnly | QFile::Text);
+  transazionitxt->seek(0);
+  transazionitxt->write(textFormatted);
+  transazionitxt->flush();
+  transazionitxt->close();
 
   delete transazionitxt;
 }
@@ -70,10 +70,10 @@ void TransazioniManager::on_filtra_pushButton_clicked()
       list<Transazione*> result;
 
       if(ui->entrate_checkBox->checkState())
-        result = conto->selezionaTransazioni(inizio,fine,categoria,"RICARICA");
+        result = conto->selezionaTransazioni(inizio,fine,categoria,"VERSAMENTO");
       else {
           if(ui->uscite_checkBox->checkState())
-            result = conto->selezionaTransazioni(inizio,fine,categoria,"PRELIEVO");
+            result = conto->selezionaTransazioni(inizio,fine,categoria,"SPESA");
           else
             result = conto->selezionaTransazioni(inizio,fine,categoria);
         }
